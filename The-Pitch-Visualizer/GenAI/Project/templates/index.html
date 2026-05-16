@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Darwix Storyboard Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <main class="page-shell">
+        <section class="hero">
+            <p class="eyebrow">The Pitch Visualizer: From Words to Storyboard </p>
+            <h1>Paste a story, pick a visual language, and watch the storyboard build itself.</h1>
+            <p class="hero-copy">
+                The generator breaks your text into visual beatsand creates illustrations with custom images.
+            </p>
+        </section>
+
+        <section class="workspace">
+            <form id="story-form" class="control-panel">
+                <div class="form-block">
+                    <label class="field-label" for="story-input">Story Text</label>
+                    <textarea
+                        id="story-input"
+                        name="story"
+                        rows="10"
+                        placeholder="Paste your story here. A few sentences is enough to create a storyboard."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-block">
+                    <span class="field-label">Visual Style</span>
+                    <div class="style-grid">
+                        {% for key, style in styles.items() %}
+                            <label class="style-card">
+                                <input
+                                    type="radio"
+                                    name="style"
+                                    value="{{ key }}"
+                                    {% if key == default_style %}checked{% endif %}
+                                >
+                                <span class="style-card__title">{{ style.label }}</span>
+                                <span class="style-card__copy">{{ style.description }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="generate-button" type="submit">Generate Storyboard</button>
+                    <p class="helper-text">Panels stream in one by one as each image finishes rendering.</p>
+                </div>
+            </form>
+
+            <section class="storyboard-stage" aria-live="polite">
+                <div class="status-bar">
+                    <div>
+                        <p class="status-label">Generation Status</p>
+                        <p id="status-text" class="status-text">Paste a story and choose a style to begin.</p>
+                    </div>
+                    <div id="progress-pill" class="progress-pill">Idle</div>
+                </div>
+
+                <div id="storyboard-grid" class="storyboard-grid"></div>
+            </section>
+        </section>
+    </main>
+</body>
+</html>
